@@ -15,15 +15,22 @@ const router = express.Router();
 // /admin/add-product => POST
 router.get('/add-product', adminController.postAddProduct);
 
-/*
+
+router.get('/getProducts',adminController.getProducts)
+
 
 router.get('/products', adminController.getProducts);
+
+/*
+
 router.get('/edit-product/:productId', adminController.getEditProduct);
 
 router.post('/edit-product', adminController.postEditProduct);
 
-router.post('/delete-product', adminController.postDeleteProduct);
 
 */
+router.post('/delete-product/:productId', adminController.postDeleteProduct);
+
+
 
 module.exports = router;

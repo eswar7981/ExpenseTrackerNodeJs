@@ -13,11 +13,18 @@ const sequelize = require('./util/database');
 //const CartItem = require('./models/cart-item');
 //const Order = require('./models/order');
 //const OrderItem = require('./models/order-item');
+const dotenv=require('dotenv')
+console.log(process.env.MONGODB_NAME)
+console.log(process.env.MONGODB_PASSWORD)
+dotenv.config()
 const mongoDb=require('./util/database')
 const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
+
+
+
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
