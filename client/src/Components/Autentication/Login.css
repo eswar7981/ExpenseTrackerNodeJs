@@ -1,0 +1,61 @@
+.form {
+    display:inline-flex;
+    }
+
+.formBoundary{
+    display:inline-grid;
+    justify-content: center;
+    border: solid;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #FFCFFF;
+    border-color:#FF6F91;
+  
+}
+
+.button {
+    display: flex;
+    margin-top: 25px;
+   justify-content: end;
+
+}
+
+.inputs {
+    display: grid;
+    gap:10px;
+    padding-left: 10px;
+}
+
+.labels {
+    display: grid;
+    gap:10px
+}
+
+.labels label{
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.modeChange{
+    width: 240px;
+    height: 25px;
+    margin-top:30px;
+    border-radius: 3px;
+    background-color: #A00039;
+color: white;
+    
+}
+
+.button button{
+    color: white;
+    border-radius: 3px;
+    background-color: #A00039;
+}
+
+.button :active{
+    background-color: rgb(61, 61, 223);
+    
+}
+
+.showPassword p{
+    font-size: 15px;
+}
