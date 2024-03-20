@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../css/cart.css";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const [products, setProducts] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetch("http://localhost:5000/cart")
       .then((res) => {
@@ -20,30 +21,48 @@ const Cart = () => {
 
   const orderHandler = (e) => {
     e.preventDefault();
-    setOrderStatus(true);
-    setTimeout(() => {
-      setOrderStatus(false);
-    }, 2000);
+
+    fetch("http://localhost:5000/createOrder",
+    {
+      method:'POST',
+      body:JSON.stringify({
+        products:products
+      }),
+      headers:{
+        'Content-Type':'application/json'
+      }
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((resp) => {
+        console.log(resp);
+        setOrderStatus(true);
+        setTimeout(() => {
+          setOrderStatus(false);
+          navigate("/orders");
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const deleteItemFromCartHandler=(e,product)=>{
-    e.preventDefault()
-   
-      fetch(`http://localhost:5000/deleteItemFromCart/${product._id}`)
-        .then((res) => {
-          return res.json();
-        })
-        .then((resp) => {
-          console.log(resp)
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-     
+  const deleteItemFromCartHandler = (e, product) => {
+    e.preventDefault();
 
+    fetch(`http://localhost:5000/deleteItemFromCart/${product._id}`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((resp) => {
+        console.log(resp);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-
-      fetch("http://localhost:5000/cart")
+    fetch("http://localhost:5000/cart")
       .then((res) => {
         return res.json();
       })
@@ -52,7 +71,7 @@ const Cart = () => {
           setProducts(resp.cartItems);
         }
       });
-  }
+  };
 
   return (
     <>
@@ -84,9 +103,13 @@ const Cart = () => {
             <li className="cart__item">
               <h1>{prod.title}</h1>
               <h2>Quantity: {prod.quantity} </h2>
-              <form >
+              <form>
                 <input type="hidden" value="" name="productId" />
-                <button className="btn danger" type="submit" onClick={(e)=>deleteItemFromCartHandler(e,prod)}>
+                <button
+                  className="btn danger"
+                  type="submit"
+                  onClick={(e) => deleteItemFromCartHandler(e, prod)}
+                >
                   Delete
                 </button>
               </form>

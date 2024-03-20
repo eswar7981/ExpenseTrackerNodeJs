@@ -82,7 +82,6 @@ class User {
       (prod) => prod.productId.toString() !== id
     );
 
-
     const updatedCarts = {
       items: productIds,
     };
@@ -90,8 +89,15 @@ class User {
       .collection("user")
       .updateOne(
         { _id: new mongodb.ObjectId(this._id) },
-        { $set: { cart:updatedCarts } }
+        { $set: { cart: updatedCarts } }
       );
+  }
+
+  removeAllItemsFromCart() {
+    const db = getDb();
+    return db
+      .collection("user")
+      .updateOne({ _id: this._id }, { $set: { cart: { items: [] } } });
   }
 
   getCartItems() {
