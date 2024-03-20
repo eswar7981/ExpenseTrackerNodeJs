@@ -6,38 +6,38 @@ const mongodb = require("mongodb");
 const getDb = require("../util/database").getDb;
 
 class Product {
-  constructor(title, price, description, imageUrl,id) {
+  constructor(title, price, description, imageUrl, user_id, id) {
     this.title = title;
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
-    this._id=id;
+    this._id = id;
+    this.user_id = user_id;
   }
 
   save() {
-    if(this._id){
-      
+    if (this._id) {
       const db = getDb();
       return db
         .collection("products")
-        .insertOne({_id:new mongodb.ObjectId(this._id)},{$set:{
-          title: this.title,
-          price: this.price,
-          description: this.description,
-          imageUrl: this.imageUrl,
-        }})
+        .insertOne(
+          { _id: new mongodb.ObjectId(this._id) },
+          {
+            $set: {
+              title: this.title,
+              price: this.price,
+              description: this.description,
+              imageUrl: this.imageUrl,
+            },
+          }
+        )
         .then((res) => {
           console.log(res);
         })
         .catch((err) => {
           console.log(err);
         });
-
-
-
-    }else{
-
-
+    } else {
       const db = getDb();
       return db
         .collection("products")
@@ -46,6 +46,7 @@ class Product {
           price: this.price,
           description: this.description,
           imageUrl: this.imageUrl,
+          user_id: this.user_id,
         })
         .then((res) => {
           console.log(res);
@@ -53,9 +54,7 @@ class Product {
         .catch((err) => {
           console.log(err);
         });
-
     }
-   
   }
 
   static fetchAll() {
@@ -65,7 +64,6 @@ class Product {
       .find()
       .toArray()
       .then((res) => {
-        console.log(res);
         return res;
       })
       .catch((err) => {
@@ -74,14 +72,12 @@ class Product {
   }
 
   static fetchById = (id) => {
-   
+    console.log(id);
     const db = getDb();
     return db
       .collection("products")
-      .findById(id)
-      .next()
+      .findOne({ _id: new mongodb.ObjectId(id) })
       .then((product) => {
-        console.log(product)
         return product;
       })
       .catch((err) => {
@@ -89,20 +85,47 @@ class Product {
       });
   };
 
+  static updateById = (id, title, price, description, imageUrl) => {
+    const db = getDb();
+    return db
+      .collection("products")
+      .updateOne(
+        {
+          _id: new mongodb.ObjectId(id),
+        },
+        {
+          $set: {
+            title: title,
+            price: price,
+            description: description,
+            imageUrl: imageUrl,
+          },
+        }
+      )
+      .then(() => {
+        console.log("item is deleted");
+        return "done";
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  static deleteById=(id)=>{
-
-    const db=getDb()
-    return db.collection("products").deleteOne({
-      _id:new mongodb.ObjectId(id)
-    }).then(()=>{
-      console.log('item is deleted')
-      return 'done'
-    }).catch((err)=>{
-      console.log(err)
-    })
-
-  }
+  static deleteById = (id) => {
+    const db = getDb();
+    return db
+      .collection("products")
+      .deleteOne({
+        _id: new mongodb.ObjectId(id),
+      })
+      .then(() => {
+        console.log("item is deleted");
+        return "done";
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 }
 
 /*

@@ -17,8 +17,10 @@ import PasswordReset from "./Components/Autentication/PasswordReset";
 import Products from "./Components/AllPages/Products";
 import Orders from "./Components/AllPages/Orders";
 import Cart from "./Components/AllPages/Cart";
-import AddProduct from "./Components/AllPages/AddProduct";
+import AddProduct from "./Components/adminPages/AddProduct";
 import AdminProduct from "./Components/AllPages/AdminProduct";
+import AdminProducts from "./Components/adminPages/AdminProducts";
+import EditProduct from "./Components/adminPages/EditProduct";
 
 function App() {
   const [openingPage,setOpeningPage]=useState(true)
@@ -42,10 +44,10 @@ setOpeningPage(false)
          <Route path="/products" element={<Products></Products>}></Route>
          <Route path="/orders" element={<Orders></Orders>}></Route>
          <Route path="/cart" element={<Cart></Cart>}></Route>
-         <Route path="/add-product" element={<AddProduct></AddProduct>}></Route>
+         <Route path="admin/add-product" element={<AddProduct></AddProduct>}></Route>
          <Route path="/adminProduct" element={<AdminProduct></AdminProduct>}></Route>
-         
-       
+         <Route path="/admin/products" element={<AdminProducts></AdminProducts>}></Route>
+       <Route path="/admin/editProduct/:id" element={<EditProduct></EditProduct>}></Route>
          </Routes>
       </main>
  

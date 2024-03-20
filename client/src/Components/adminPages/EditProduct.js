@@ -1,18 +1,31 @@
-import React, { useState } from "react";
-
-import "../css/forms.css";
-import "../css/product.css";
-import { json } from "react-router-dom";
-
-const AddProduct = () => {
+import React from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+const EditProduct = () => {
   const [orderStatus, setOrderStatus] = useState(false);
-
-  const [productDetails, setProductDetails] = useState({
+  const [productDetails,setProductDetails]=useState({
     title: "",
-    imageURL: "",
+    imageUrl: "",
     price: "",
     description: "",
-  });
+  })
+
+  let id = useParams();
+  useEffect(() => {
+    fetch(`http://localhost:5000/admin/products/editProduct/${id.id}`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((resp) => {
+        console.log(resp)
+        setProductDetails(resp.product)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+
 
   const titleHandler = (e) => {
     setProductDetails({ ...productDetails, ["title"]: e.target.value });
@@ -27,12 +40,14 @@ const AddProduct = () => {
   };
 
   const ImageURLHandler = (e) => {
-    setProductDetails({ ...productDetails, ["imageURL"]: e.target.value });
+    setProductDetails({ ...productDetails, ["imageUrl"]: e.target.value });
   };
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    fetch("http://localhost:5000/add-product", {
+ 
+
+  const editHanler=(e)=>{
+    e.preventDefault()
+    fetch(`http://localhost:5000/admin/products/editProduct/${id.id}`, {
       method: "POST",
       body: JSON.stringify(productDetails),
       headers: {
@@ -40,21 +55,21 @@ const AddProduct = () => {
       },
     })
       .then((res) => {
-        return res.json()
+        return res.json();
       })
       .then((resp) => {
-        if(resp.status=='success'){
-        setOrderStatus(true);
-        setTimeout(() => {
-          setOrderStatus(false);
-        }, 2000);
+        if (resp.status == "success") {
+          setOrderStatus(true);
+          setTimeout(() => {
+            setOrderStatus(false);
+          }, 2000);
         }
       })
       .catch((err) => {
         console.log(err);
       });
-    setProductDetails({ title: "", imageURL: "", price: "", description: "" });
-  };
+
+  }
 
   return (
     <>
@@ -68,11 +83,11 @@ const AddProduct = () => {
                 padding: "20px 20px",
               }}
             >
-              A new book {productDetails.title} is added for sale
+               {productDetails.title} product details are updated
             </p>
           </div>
         )}
-        <form className="product-form" onSubmit={submitHandler}>
+        <form className="product-form" >
           <div className="form-control">
             <label for="title">Title</label>
             <input
@@ -89,7 +104,7 @@ const AddProduct = () => {
               type="text"
               name="imageUrl"
               id="imageUrl"
-              value={productDetails.imageURL}
+              value={productDetails.imageUrl}
               onChange={ImageURLHandler}
             />
           </div>
@@ -118,8 +133,10 @@ const AddProduct = () => {
             className="btn"
             type="submit"
             style={{ backgroundColor: "black", color: "white" }}
+
+            onClick={editHanler}
           >
-            Add
+            Edit
           </button>
         </form>
       </main>
@@ -127,4 +144,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct;

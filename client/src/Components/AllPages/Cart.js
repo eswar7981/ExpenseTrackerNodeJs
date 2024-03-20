@@ -1,8 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../css/cart.css";
 
 const Cart = () => {
-  const products = [];
+
+  const [products,setProducts]=useState([])
+
+  useEffect(() => {
+    fetch("http://localhost:5000/cart")
+      .then((res) => {
+        return res.json();
+      })
+      .then((resp) => {
+      if(resp.status=='success'){
+       
+        setProducts(resp.cartItems)
+      }
+      });
+  }, []);
+  
   const [orderStatus, setOrderStatus] = useState(false);
 
   const orderHandler = (e) => {
@@ -29,12 +44,12 @@ const Cart = () => {
         </div>
       )}
 
-      {products.length != 0 &&
+      {products &&
         products.map((prod) => (
           <ul className="cart__item-list">
             <li className="cart__item">
-              <h1>p.productId.title</h1>
-              <h2>Quantity: p.quantity </h2>
+              <h1>{prod.title}</h1>
+              <h2>Quantity: {prod.quantity} </h2>
               <form action="/cart-delete-item" method="POST">
                 <input type="hidden" value="" name="productId" />
                 <button className="btn danger" type="submit">
@@ -45,7 +60,7 @@ const Cart = () => {
           </ul>
         ))}
 
-      {products.length == 0 && (
+      {products && (
         <div
           style={{
             display: "flex",

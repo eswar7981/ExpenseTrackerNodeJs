@@ -21,15 +21,19 @@ router.post('/add-product', adminController.postAddProduct);
 
 router.get('/products', adminController.getProducts);
 
+
+
+router.get('/products/editProduct/:productId', adminController.getEditProduct);
+
+router.post('/products/editProduct/:productId', adminController.postEditProduct);
 /*
-
-router.get('/edit-product/:productId', adminController.getEditProduct);
-
 router.post('/edit-product', adminController.postEditProduct);
 
 
 */
-router.post('/delete-product/:productId', adminController.postDeleteProduct);
+router.get('/deleteProduct/:productId', adminController.DeleteProduct);
+
+
 
 
 

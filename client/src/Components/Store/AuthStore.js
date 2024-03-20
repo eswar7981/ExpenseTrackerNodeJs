@@ -1,8 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 const initialAuthState={
-    login:false,
-    token:'',
-    premium:false,
+    login:'customer'
 };
 
 const authSlice=createSlice({
@@ -10,20 +8,20 @@ const authSlice=createSlice({
     initialState:initialAuthState,
     reducers:{
         setLogin(state){
-            state.login=!state.login
-            if(state.login==false){
-                state.token=''
-            }
-        },
-        setToken(state,action){
-            state.token=action.payload
+           if(state.login=='admin'){
+            state.login='customer'
+           }
+           else{
+            if(state.login=='customer'){
+                state.login='admin'
+               }
+           }
+           
 
-
+           console.log(state.login)
         },
-        setPremium(state){
-            state.premium=true
-            console.log(state.premium)
-        }
+   
+      
 
     }
 })

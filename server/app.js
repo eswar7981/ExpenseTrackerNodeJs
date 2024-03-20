@@ -2,7 +2,7 @@ const path = require("path");
 const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
-const User= require('./models/user')
+const User = require("./models/user");
 const errorController = require("./controllers/error");
 const sequelize = require("./util/database");
 //const Product = require('./models/product');
@@ -26,25 +26,28 @@ app.set("views", "views");
 
 app.use(express.json());
 
-app.use((req,res)=>{
+app.use((req, res, next) => {
+  User.fetchById("65f96568a337a709b357587f")
+    .then((user) => {
+      req.user = new User(user.name, user.email, user._id, user.cart);
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
-User.fetchById('65f96568a337a709b357587f').then((user)=>{
-  console.log(user)
-  req.user=user
-  next()
-}).catch((err)=>{
-  console.log(err)
-})
-
-  /*const user=new User('eswar','eswarsatyavarapu7981@gmail.com')
+/*const user=new User('eswar','eswarsatyavarapu7981@gmail.com')
 
   user.save().then(()=>{
     console.log('success created user')
   }).catch((err)=>{
     console.log('failed')
   })
-  */
+  
 })
+
+*/
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
@@ -53,7 +56,7 @@ const mongoConnect = require("./util/database").mongoConnect;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(adminRoutes);
+app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
 mongoConnect(() => {
