@@ -75,6 +75,25 @@ class User {
       );
   }
 
+  deleteCartItem(id) {
+    const db = getDb();
+
+    const productIds = this.cart.items.filter(
+      (prod) => prod.productId.toString() !== id
+    );
+
+
+    const updatedCarts = {
+      items: productIds,
+    };
+    return db
+      .collection("user")
+      .updateOne(
+        { _id: new mongodb.ObjectId(this._id) },
+        { $set: { cart:updatedCarts } }
+      );
+  }
+
   getCartItems() {
     const db = getDb();
     const productIds = this.cart.items.map((prod) => {
@@ -90,7 +109,7 @@ class User {
             ...p,
             quantity: this.cart.items.find((i) => {
               return i.productId.toString() === p._id.toString();
-            }).quantity
+            }).quantity,
           };
         });
       });

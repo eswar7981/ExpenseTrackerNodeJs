@@ -39,11 +39,10 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  console.log("hii")
-  req.user.getCartItems().then((cart)=>{
-    res.send({status:'success',cartItems:cart})
-  })
-  
+  console.log("hii");
+  req.user.getCartItems().then((cart) => {
+    res.send({ status: "success", cartItems: cart });
+  });
 };
 
 exports.postCart = (req, res, next) => {
@@ -55,18 +54,17 @@ exports.postCart = (req, res, next) => {
     .then((res) => {
       console.log(res);
     });
-   
 };
 
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.params.productId;
-
-  Product.deleteById(prodId)
+  req.user
+    .deleteCartItem(prodId)
     .then(() => {
-      res.send({ info: "item is deleted" });
+      res.send({ status: "success" });
     })
-    .catch(() => {
-      res.send({ info: "unable to delete" });
+    .catch((err) => {
+      console.log(err);
     });
 };
 

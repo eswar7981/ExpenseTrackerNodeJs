@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../css/cart.css";
 
 const Cart = () => {
-
-  const [products,setProducts]=useState([])
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:5000/cart")
@@ -11,13 +10,12 @@ const Cart = () => {
         return res.json();
       })
       .then((resp) => {
-      if(resp.status=='success'){
-       
-        setProducts(resp.cartItems)
-      }
+        if (resp.status == "success") {
+          setProducts(resp.cartItems);
+        }
       });
   }, []);
-  
+
   const [orderStatus, setOrderStatus] = useState(false);
 
   const orderHandler = (e) => {
@@ -28,10 +26,46 @@ const Cart = () => {
     }, 2000);
   };
 
+  const deleteItemFromCartHandler=(e,product)=>{
+    e.preventDefault()
+   
+      fetch(`http://localhost:5000/deleteItemFromCart/${product._id}`)
+        .then((res) => {
+          return res.json();
+        })
+        .then((resp) => {
+          console.log(resp)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+     
+
+
+
+      fetch("http://localhost:5000/cart")
+      .then((res) => {
+        return res.json();
+      })
+      .then((resp) => {
+        if (resp.status == "success") {
+          setProducts(resp.cartItems);
+        }
+      });
+  }
+
   return (
     <>
       {orderStatus && (
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            position: "absolute",
+            justifyContent: "center",
+            marginLeft: "500px",
+            marginTop: "-50px",
+          }}
+        >
           <p
             style={{
               backgroundColor: "green",
@@ -50,9 +84,9 @@ const Cart = () => {
             <li className="cart__item">
               <h1>{prod.title}</h1>
               <h2>Quantity: {prod.quantity} </h2>
-              <form action="/cart-delete-item" method="POST">
+              <form >
                 <input type="hidden" value="" name="productId" />
-                <button className="btn danger" type="submit">
+                <button className="btn danger" type="submit" onClick={(e)=>deleteItemFromCartHandler(e,prod)}>
                   Delete
                 </button>
               </form>
