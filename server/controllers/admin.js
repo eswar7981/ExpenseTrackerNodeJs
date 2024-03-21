@@ -13,8 +13,13 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageURL;
   const price = parseInt(req.body.price);
   const description = req.body.description;
-
-  const product = new Product(title, price, description, imageUrl,req.user._id);
+  console.log("hii");
+  const product = new Product({
+    title: title,
+    price: price,
+    description: description,
+    imageUrl: imageUrl,
+  });
 
   product
     .save()
@@ -31,22 +36,24 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getEditProduct = (req, res, next) => {
   const id = req.params.productId;
-  Product.fetchById(id).then((resp) => {
+  Product.findById(id).then((resp) => {
     res.send({ status: "success", product: resp });
   });
 };
 
 exports.postEditProduct = (req, res, next) => {
-
   const id = req.params.productId;
 
-  Product.updateById(
-    id,
-    req.body.title,
-    req.body.price,
-    req.body.description,
-    req.body.imageUrl
-  )
+  Product.findById(id)
+    .then((product) => {
+      (product.title = req.body.title),
+        (product.price = req.body.price),
+        (product.description = req.body.description),
+        (product.imageUrl = req.body.imageUrl);
+
+      return product.save();
+    })
+
     .then((resp) => {
       res.send({ status: "success" });
     })
@@ -56,8 +63,7 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  
-  Product.fetchAll()
+  Product.find()
     .then((products) => {
       res.send({ status: "success", products: products });
     })
@@ -80,12 +86,14 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.DeleteProduct = (req, res, next) => {
-  const id=req.params.productId
-  Product.deleteById(id).then(()=>{
-    res.send({status:'success'})
-  }).catch((err)=>{
-    console.log(err)
-  })
+  const id = req.params.productId;
+  Product.findByIdAndDelete(id)
+    .then(() => {
+      res.send({ status: "success" });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.postDeleteProduct = (req, res, next) => {

@@ -2,7 +2,7 @@ const Product = require("../models/product");
 const { use } = require("../routes/admin");
 const Order=require('../models/order')
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then((products) => {
       res.send({ status: "success", products: products });
     })
@@ -47,14 +47,16 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   console.log("hii");
-  req.user.getCartItems().then((cart) => {
-    res.send({ status: "success", cartItems: cart });
+  req.user.populate('cart.items.productId').then((cart) => {
+  
+   
+    res.send({ status: "success", cartItems: cart.cart.items });
   });
 };
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.fetchById(prodId)
+  Product.findById(prodId)
     .then((product) => {
       return req.user.addToCart(product);
     })

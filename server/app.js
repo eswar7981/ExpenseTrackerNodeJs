@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const User = require("./models/user");
 const errorController = require("./controllers/error");
 const sequelize = require("./util/database");
+const mongoose = require("mongoose");
 //const Product = require('./models/product');
 //const User = require('./models/user');
 //const Cart = require('./models/cart');
@@ -26,16 +27,21 @@ app.set("views", "views");
 
 app.use(express.json());
 
+
 app.use((req, res, next) => {
-  User.fetchById("65f96568a337a709b357587f")
+  User.findById("65fc17dd6ff134d456989bb7")
     .then((user) => {
-      req.user = new User(user.name, user.email, user._id, user.cart);
-      next();
+      req.user =user
+    next();
     })
     .catch((err) => {
       console.log(err);
     });
+
+    
 });
+
+
 
 /*const user=new User('eswar','eswarsatyavarapu7981@gmail.com')
 
@@ -56,12 +62,32 @@ const mongoConnect = require("./util/database").mongoConnect;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
+
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
-mongoConnect(() => {
-  app.listen(5000);
-});
+mongoose
+  .connect( 
+  )
+  .then((res) => {
+    User.findOne().then((user)=>{
+      if(!user){
+        const user= new User({
+          name:'Eswar',
+          email:'eswar@gmail.com',
+          cart:{
+            items:[]
+          }
+        })
+
+        user.save()
+      }
+    })
+    app.listen(5000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 /*
 

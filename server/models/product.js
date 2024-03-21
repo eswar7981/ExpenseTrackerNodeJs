@@ -1,3 +1,32 @@
+const mongoose=require('mongoose');
+const { STRING } = require('sequelize');
+const Schema=mongoose.Schema
+
+const productSchema= new Schema({
+  title:{
+    type:String,
+    required:true
+  },
+  price:{
+    type:Number,
+    required:true
+  },
+  description:{
+    type:String,
+    required:true
+  },
+  imageUrl:{
+    type:String,
+    required:true
+  },
+  userId:{
+    type:Schema.Types.ObjectId,
+    ref:'User'
+  }
+})
+
+/*
+
 const Db = require("mongodb/lib/db");
 const { get } = require("../routes/admin");
 const { mongoConnect } = require("../util/database");
@@ -159,4 +188,4 @@ const Product = sequelize.define('product', {
 
 */
 
-module.exports = Product;
+module.exports = mongoose.model('Product',productSchema);
