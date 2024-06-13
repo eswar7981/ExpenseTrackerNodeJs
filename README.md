@@ -4,7 +4,7 @@
 <h5>KeyFeatures:</h5>
  <p>1.User can able to see all his/her previous expenses.</p> 
   <p>2.Leaderboard 🥇 to display the users with most expenses.</p>
-  <p>3.razorpay api to handle the payment 💰 gateway for the premium</p> 
+  <p>3.Razorpay api to handle the payment 💰 gateway for the premium</p> 
   <p>4.When user purchase the premium,now user can download ⬇️ all the previous expenses.</p>
   <p>5.Expenses are shown daily,weekly and monthly.</p>
   <p>6.Forgot password feature is also incase if user forgots the password 📧</p>
